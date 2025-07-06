@@ -44,7 +44,7 @@
          </font>
       </Label>
       <Label fx:id="songArtist" alignment="CENTER" layoutX="246.0" layoutY="38.0" prefHeight="25.0" prefWidth="292.0" text="Artist" textAlignment="JUSTIFY" textFill="WHITE" />
-      <ListView fx:id="songView" prefHeight="339.0" prefWidth="200.0" style="-fx-background-color: #72555f;" />
+      <ListView fx:id="songList" prefHeight="339.0" prefWidth="200.0" style="-fx-background-color: #72555f;" />
       <ImageView fx:id="albumPhoto" fitHeight="270.0" fitWidth="270.0" layoutX="256.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true" />
       <ProgressBar fx:id="songProgressBar" layoutY="343.0" prefHeight="20.0" prefWidth="600.0" progress="0.0" />
    </children>

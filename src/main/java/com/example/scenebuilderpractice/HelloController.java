@@ -2,15 +2,18 @@ package com.example.scenebuilderpractice;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
-import javax.swing.text.html.ListView;
+import javafx.scene.control.ListView;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -21,8 +24,15 @@ import javafx.scene.media.Media;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioHeader;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
+import org.jaudiotagger.tag.FieldKey;
 
 
 
@@ -38,7 +48,7 @@ public class HelloController implements Initializable {
     @FXML
     private ImageView albumPhoto;
     @FXML
-    private ListView songList;
+    private ListView<String> songList;
     @FXML
     private ToggleButton playButton, pauseButton, previousButton, nextButton;
     @FXML
@@ -70,27 +80,54 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         songs = new ArrayList<File>();
+        ObservableList<String> songNames = FXCollections.observableArrayList();
 
         directory = new File("Music");
-
         files = directory.listFiles();
 
         if (files != null) {
             for (File file : files) {
                 songs.add(file);
+                String fileName = file.getName();
+                fileName = fileName.replaceFirst("[.][^.]+$", "");
+                songNames.add(fileName);
                 System.out.println(file);
             }
         }
 
+
+        songList.setItems(songNames); // Set items to ListView
+
+        songList.setStyle("-fx-background-color: #72555f; " +           // Dark background
+                "-fx-control-inner-background: #72555f; " +     // Inner background
+                "-fx-background: #72555f; ");
+
+
+        // Allow user to select certain songs from the list
+        songList.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                songNumber = newValue.intValue();
+
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    if (running) {
+                        stopTimer();
+                    }
+                }
+
+                media = new Media(songs.get(songNumber).toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+                songName.setText(songs.get(songNumber).getName());
+                playMedia();
+                songList.refresh();
+            }
+        });
+
         media = new Media(songs.get(songNumber).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
-
         songName.setText(songs.get(songNumber).getName());
-
         slowedButton.setOnAction(this::slowMedia);
-
         volumeSlider.setValue(100); // Sets initial volume to 100
-
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -125,6 +162,7 @@ public class HelloController implements Initializable {
 
     public void playMedia() {
         setAlbumPhoto(songs.get(songNumber));
+        songArtist.setText(getArtistName(songs.get(songNumber)));
         startTimer();
         mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
         slowedButton.setSelected(false);
@@ -237,5 +275,27 @@ public class HelloController implements Initializable {
     public void stopTimer() {
         running = false;
         timer.cancel();
+    }
+
+    private String getArtistName(File file) {
+        try {
+            AudioFile audioFile = AudioFileIO.read(file);
+            Tag tag = audioFile.getTag();
+            if (tag != null) {
+                String artist = tag.getFirst(FieldKey.ARTIST);
+                return artist.isEmpty() ? "Unknown Artist" : artist;
+            }
+        } catch (CannotReadException e) {
+            throw new RuntimeException(e);
+        } catch (TagException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidAudioFrameException e) {
+            throw new RuntimeException(e);
+        } catch (ReadOnlyFileException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return "Unknown Artist";
     }
 }
