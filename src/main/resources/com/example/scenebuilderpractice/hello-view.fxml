@@ -1,51 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #785964;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.scenebuilderpractice.HelloController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #785964;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.scenebuilderpractice.HelloController">
    <children>
-      <ToggleButton fx:id="slowedButton" layoutX="518.0" layoutY="364.0" mnemonicParsing="false" onAction="#slowMedia" prefHeight="34.0" prefWidth="81.0" style="-fx-background-color: #A6979C;" text="SLOWED" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="AppleMyungjo Regular" size="14.0" />
-         </font>
-      </ToggleButton>
-      <ToggleButton fx:id="playButton" layoutX="1.0" layoutY="364.0" mnemonicParsing="false" onAction="#playMedia" prefHeight="34.0" prefWidth="59.0" style="-fx-background-color: #A6979C;" text="Play" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </ToggleButton>
-      <ToggleButton fx:id="pauseButton" layoutX="61.0" layoutY="364.0" mnemonicParsing="false" onAction="#pauseMedia" prefHeight="34.0" prefWidth="61.0" style="-fx-background-color: #A6979C;" text="Pause" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="AppleMyungjo Regular" size="14.0" />
-         </font>
-      </ToggleButton>
-      <ToggleButton fx:id="previousButton" layoutX="123.0" layoutY="364.0" mnemonicParsing="false" onAction="#previousMedia" prefHeight="34.0" prefWidth="77.0" style="-fx-background-color: #A6979C;" text="Previous" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </ToggleButton>
-      <ToggleButton fx:id="nextButton" layoutX="201.0" layoutY="364.0" mnemonicParsing="false" onAction="#nextMedia" prefHeight="34.0" prefWidth="82.0" style="-fx-background-color: #A6979C;" text="Next" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </ToggleButton>
-      <Slider fx:id="volumeSlider" blockIncrement="5.0" layoutX="309.0" layoutY="375.0" prefHeight="16.0" prefWidth="184.0" />
-      <Label fx:id="songName" alignment="CENTER" layoutX="245.0" layoutY="11.0" prefHeight="25.0" prefWidth="292.0" text="Song Name" textAlignment="JUSTIFY" textFill="WHITE">
-         <font>
-            <Font name="AppleMyungjo Regular" size="13.0" />
-         </font>
-      </Label>
-      <Label fx:id="songArtist" alignment="CENTER" layoutX="246.0" layoutY="38.0" prefHeight="25.0" prefWidth="292.0" text="Artist" textAlignment="JUSTIFY" textFill="WHITE" />
-      <ListView fx:id="songList" prefHeight="339.0" prefWidth="200.0" style="-fx-background-color: #72555f;" />
-      <ImageView fx:id="albumPhoto" fitHeight="270.0" fitWidth="270.0" layoutX="256.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true" />
-      <ProgressBar fx:id="songProgressBar" layoutY="343.0" prefHeight="20.0" prefWidth="600.0" progress="0.0" />
+      <ListView fx:id="songList" style="-fx-background-color: #72555f;" prefWidth="250.0" maxWidth="300.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.bottomAnchor="60.0"/>
+      <StackPane AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="60.0">
+         <VBox alignment="CENTER" spacing="10.0">
+            <ImageView fx:id="albumPhoto" fitHeight="270.0" fitWidth="270.0" pickOnBounds="true" preserveRatio="true"/>
+            <Label fx:id="songName" alignment="CENTER" text="Song Name" textAlignment="CENTER" textFill="WHITE">
+               <Label fx:id="songArtist" alignment="CENTER" text="Artist" textFill="WHITE"/>
+               <font>
+                  <Font name="AppleMyungjo Regular" size="13.0" />
+               </font>
+            </Label>
+         </VBox>
+      </StackPane>
+      <ProgressBar fx:id="songProgressBar" prefHeight="20.0" progress="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="35.0" />
+      <ToggleButton fx:id="playButton" text="Play" onAction="#playMedia" style="-fx-background-color: #A6979C;" textFill="WHITE" prefHeight="34.0" prefWidth="59.0" AnchorPane.leftAnchor="10.0" AnchorPane.bottomAnchor="0.0" />
+      <ToggleButton fx:id="pauseButton" text="Pause" onAction="#pauseMedia" style="-fx-background-color: #A6979C;" textFill="WHITE" prefHeight="34.0" prefWidth="61.0" AnchorPane.leftAnchor="80.0" AnchorPane.bottomAnchor="0.0" />
+      <ToggleButton fx:id="previousButton" text="Previous" onAction="#previousMedia" style="-fx-background-color: #A6979C;" textFill="WHITE" prefHeight="34.0" prefWidth="77.0" AnchorPane.leftAnchor="150.0" AnchorPane.bottomAnchor="0.0" />
+      <ToggleButton fx:id="nextButton" text="Next" onAction="#nextMedia" style="-fx-background-color: #A6979C;" textFill="WHITE" prefHeight="34.0" prefWidth="82.0" AnchorPane.leftAnchor="240.0" AnchorPane.bottomAnchor="0.0" />
+      <Slider fx:id="volumeSlider" blockIncrement="5.0" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="110.0" AnchorPane.bottomAnchor="10.0" />
+      <ToggleButton fx:id="slowedButton" text="SLOWED" onAction="#slowMedia" style="-fx-background-color: #A6979C;" textFill="WHITE" prefHeight="34.0" prefWidth="81.0" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="0.0" />
+      <Button fx:id="importButton" text="IMPORT" onAction="#importMedia" style="-fx-background-color: #A6979C;" textFill="WHITE" AnchorPane.topAnchor="10.0" AnchorPane.rightAnchor="10.0" />
    </children>
 </AnchorPane>

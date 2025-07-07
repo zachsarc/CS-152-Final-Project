@@ -22,9 +22,10 @@ import java.util.TimerTask;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -32,7 +33,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
-import org.jaudiotagger.tag.FieldKey;
 
 
 
@@ -49,6 +49,8 @@ public class HelloController implements Initializable {
     private ImageView albumPhoto;
     @FXML
     private ListView<String> songList;
+    @FXML
+    private Button importButton;
     @FXML
     private ToggleButton playButton, pauseButton, previousButton, nextButton;
     @FXML
@@ -71,6 +73,7 @@ public class HelloController implements Initializable {
     private Timer timer;
     private TimerTask task;
     private boolean running;
+    private ObservableList<String> songNames = FXCollections.observableArrayList();
 
     @FXML
     protected void onHelloButtonClick() {
@@ -79,24 +82,8 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        songs = new ArrayList<File>();
-        ObservableList<String> songNames = FXCollections.observableArrayList();
-
-        directory = new File("Music");
-        files = directory.listFiles();
-
-        if (files != null) {
-            for (File file : files) {
-                songs.add(file);
-                String fileName = file.getName();
-                fileName = fileName.replaceFirst("[.][^.]+$", "");
-                songNames.add(fileName);
-                System.out.println(file);
-            }
-        }
-
-
-        songList.setItems(songNames); // Set items to ListView
+        songs = new ArrayList<>();
+        songList.setItems(songNames);
 
         songList.setStyle("-fx-background-color: #72555f; " +           // Dark background
                 "-fx-control-inner-background: #72555f; " +     // Inner background
@@ -106,7 +93,11 @@ public class HelloController implements Initializable {
         // Allow user to select certain songs from the list
         songList.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                songNumber = newValue.intValue();
+                int selectedIndex = newValue.intValue();
+                if (selectedIndex >= 0 && selectedIndex < songs.size()) {
+                    songNumber = selectedIndex;
+                    playMedia();
+                }
 
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
@@ -123,19 +114,35 @@ public class HelloController implements Initializable {
             }
         });
 
-        media = new Media(songs.get(songNumber).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        songName.setText(songs.get(songNumber).getName());
+        songName.setText("No song selected");
+        songArtist.setText("");
         slowedButton.setOnAction(this::slowMedia);
         volumeSlider.setValue(100); // Sets initial volume to 100
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-
                 mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
             }
         });
 
+    }
+
+    public void importMedia() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Files");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("mp3 files", "*.mp3")
+        );
+
+        Stage stage = (Stage) importButton.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            songs.add(file);
+            String cleanName = file.getName().replaceFirst("[.][^.]+$", "");
+            songNames.add(cleanName);
+            System.out.println("Imported: " + file.getAbsolutePath());
+        }
     }
 
     public void setAlbumPhoto(File songFile) {
@@ -161,13 +168,32 @@ public class HelloController implements Initializable {
     }
 
     public void playMedia() {
+        if (songs.isEmpty()) {
+            System.out.println("No songs to play.");
+            return;
+        }
+
+        File currentSong = songs.get(songNumber);
+
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            if (running) {
+                stopTimer();
+            }
+        }
+
         setAlbumPhoto(songs.get(songNumber));
         songArtist.setText(getArtistName(songs.get(songNumber)));
-        startTimer();
+        songName.setText(currentSong.getName());
+        media = new Media(songs.get(songNumber).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
         slowedButton.setSelected(false);
         mediaPlayer.setRate(1.0); // Makes sure the slowedMedia rate change is turned off when the user selects new song
         mediaPlayer.play();
+
+        startTimer();
+        songList.refresh();
     }
 
     public void pauseMedia() {
@@ -176,78 +202,47 @@ public class HelloController implements Initializable {
     }
 
     public void previousMedia() {
-        if (songNumber > 0) {
-            songNumber--;
-
-            mediaPlayer.stop();
-
-            if (running) {
-                stopTimer();
-            }
-
-            media = new Media(songs.get(songNumber).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-
-            songName.setText(songs.get(songNumber).getName());
-
-            playMedia();
-        } else {
-            songNumber = songs.size() - 1;
-
-            mediaPlayer.stop();
-
-            if (running) {
-                stopTimer();
-            }
-
-            media = new Media(songs.get(songNumber).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-
-            songName.setText(songs.get(songNumber).getName());
-
-            playMedia();
+        if(songs.isEmpty()) {
+            System.out.println("No songs loaded");
+            return;
         }
+        songNumber = (songNumber > 0) ? songNumber - 1 : songs.size() - 1;
+
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            if (running) {
+                stopTimer();
+            }
+        }
+        playMedia();
     }
 
     public void nextMedia() {
-        if (songNumber < songs.size() - 1) {
-            songNumber++;
-
-            mediaPlayer.stop();
-
-            if (running) {
-                stopTimer();
-            }
-
-            media = new Media(songs.get(songNumber).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-
-            songName.setText(songs.get(songNumber).getName());
-
-            playMedia();
-        } else {
-            songNumber = 0;
-
-            mediaPlayer.stop();
-
-            if (running) {
-                stopTimer();
-            }
-
-            media = new Media(songs.get(songNumber).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-
-            songName.setText(songs.get(songNumber).getName());
-
-            playMedia();
+        if(songs.isEmpty()) {
+            System.out.println("No songs loaded");
+            return;
         }
+        songNumber++; // Move to next song
+
+        // Wrap around to the beginning if we reach the end
+        if (songNumber >= songs.size()) {
+            songNumber = 0;
+        }
+
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            if (running) {
+                stopTimer();
+            }
+        }
+        playMedia();
     }
 
     public void slowMedia(javafx.event.ActionEvent actionEvent) {
         ToggleButton slowedButton = (ToggleButton) actionEvent.getSource();
 
         if (slowedButton.isSelected()) {
-            mediaPlayer.setRate(0.75); // Slow speed
+            mediaPlayer.setRate(0.85); // Slow speed
         } else {
             mediaPlayer.setRate(1.0); // Normal speed
         }
