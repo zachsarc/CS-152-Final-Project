@@ -30,7 +30,7 @@
       <ToggleButton fx:id="playButton" onAction="#playMedia" prefHeight="34.0" prefWidth="80.0" style="-fx-background-color: #A6979C;" text="Play" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="1.0" />
       <ToggleButton fx:id="previousButton" onAction="#previousMedia" prefHeight="34.0" prefWidth="80.0" style="-fx-background-color: #A6979C;" text="Previous" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="82.0" />
       <ToggleButton fx:id="nextButton" onAction="#nextMedia" prefHeight="34.0" prefWidth="82.0" style="-fx-background-color: #A6979C;" text="Next" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="163.0" />
-      <Slider fx:id="volumeSlider" blockIncrement="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="80.0" />
+      <Slider fx:id="volumeSlider" blockIncrement="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="85.0" />
       <ToggleButton fx:id="slowedButton" onAction="#slowMedia" prefHeight="34.0" prefWidth="81.0" style="-fx-background-color: #A6979C;" text="SLOWED" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="1.0" />
       <Button fx:id="importButton" onAction="#importMedia" style="-fx-background-color: #A6979C;" text="IMPORT" textFill="WHITE" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
    </children>

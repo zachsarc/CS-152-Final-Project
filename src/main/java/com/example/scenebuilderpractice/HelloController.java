@@ -64,9 +64,6 @@ public class HelloController implements Initializable {
     private Media media;
     private MediaPlayer mediaPlayer;
 
-    private File directory;
-    private File[] files;
-
     private ArrayList<File> songs;
 
     private int songNumber;
