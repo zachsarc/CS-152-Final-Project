@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -52,7 +53,7 @@ public class HelloController implements Initializable {
     @FXML
     private Button importButton;
     @FXML
-    private ToggleButton playButton, pauseButton, previousButton, nextButton;
+    private ToggleButton playButton, previousButton, nextButton;
     @FXML
     private ToggleButton slowedButton;
     @FXML
@@ -96,21 +97,15 @@ public class HelloController implements Initializable {
                 int selectedIndex = newValue.intValue();
                 if (selectedIndex >= 0 && selectedIndex < songs.size()) {
                     songNumber = selectedIndex;
-                    playMedia();
-                }
-
-                if (mediaPlayer != null) {
-                    mediaPlayer.stop();
-                    if (running) {
-                        stopTimer();
+                    if (mediaPlayer != null) {
+                        mediaPlayer.stop();
+                        if (running) {
+                            stopTimer();
+                        }
                     }
+                    playMedia();
+                    songList.refresh();
                 }
-
-                media = new Media(songs.get(songNumber).toURI().toString());
-                mediaPlayer = new MediaPlayer(media);
-                songName.setText(songs.get(songNumber).getName());
-                playMedia();
-                songList.refresh();
             }
         });
 
@@ -168,38 +163,49 @@ public class HelloController implements Initializable {
     }
 
     public void playMedia() {
-        if (songs.isEmpty()) {
-            System.out.println("No songs to play.");
-            return;
-        }
+            if (songs.isEmpty()) {
+                System.out.println("No songs to play.");
+                return;
+            }
 
-        File currentSong = songs.get(songNumber);
+            File currentSong = songs.get(songNumber);
 
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            if (running) {
-                stopTimer();
+            // Check if we need to create a new MediaPlayer or if we're switching songs
+            if (mediaPlayer == null || mediaPlayer.getMedia() == null || !mediaPlayer.getMedia().getSource().equals(currentSong.toURI().toString())) {
+
+                // Create a new MediaPlayer for the new song
+                setAlbumPhoto(currentSong);
+                songArtist.setText(getArtistName(currentSong));
+                songName.setText(currentSong.getName());
+                media = new Media(currentSong.toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+                slowedButton.setSelected(false);
+                mediaPlayer.setRate(1.0);
+
+                // Always play the new song
+                mediaPlayer.play();
+                playButton.setText("Pause");
+                startTimer();
+            } else {
+                // Handle play/pause for the current song
+                MediaPlayer.Status status = mediaPlayer.getStatus();
+
+                if (status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED) {
+                    return;
+                }
+
+                if (status == MediaPlayer.Status.PLAYING) {
+                    mediaPlayer.pause();
+                    playButton.setText("Play");
+                    stopTimer();
+                } else {
+                    mediaPlayer.play();
+                    playButton.setText("Pause");
+                    startTimer();
+                }
             }
         }
-
-        setAlbumPhoto(songs.get(songNumber));
-        songArtist.setText(getArtistName(songs.get(songNumber)));
-        songName.setText(currentSong.getName());
-        media = new Media(songs.get(songNumber).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
-        slowedButton.setSelected(false);
-        mediaPlayer.setRate(1.0); // Makes sure the slowedMedia rate change is turned off when the user selects new song
-        mediaPlayer.play();
-
-        startTimer();
-        songList.refresh();
-    }
-
-    public void pauseMedia() {
-        stopTimer();
-        mediaPlayer.pause();
-    }
 
     public void previousMedia() {
         if(songs.isEmpty()) {
@@ -222,7 +228,7 @@ public class HelloController implements Initializable {
             System.out.println("No songs loaded");
             return;
         }
-        songNumber++; // Move to next song
+        songNumber++; // Move to the next song
 
         // Wrap around to the beginning if we reach the end
         if (songNumber >= songs.size()) {
@@ -238,7 +244,7 @@ public class HelloController implements Initializable {
         playMedia();
     }
 
-    public void slowMedia(javafx.event.ActionEvent actionEvent) {
+    public void slowMedia(ActionEvent actionEvent) {
         ToggleButton slowedButton = (ToggleButton) actionEvent.getSource();
 
         if (slowedButton.isSelected()) {
