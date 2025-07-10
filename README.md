@@ -12,3 +12,7 @@ To run this project, you need:
 - Maven 3.6 or later
 - JavaFX runtime
 
+### Author: Zach Lariccia (zachsarc)
+
+## Example of working program
+![ex](ExampleMP3.png)
