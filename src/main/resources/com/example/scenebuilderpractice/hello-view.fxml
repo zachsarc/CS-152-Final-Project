@@ -19,7 +19,11 @@
          <VBox alignment="CENTER" spacing="10.0">
             <ImageView fx:id="albumPhoto" fitHeight="270.0" fitWidth="270.0" pickOnBounds="true" preserveRatio="true" />
             <Label fx:id="songName" alignment="CENTER" text="Song Name" textAlignment="CENTER" textFill="WHITE">
-               <Label fx:id="songArtist" alignment="CENTER" text="Artist" textFill="WHITE" />
+               <font>
+                  <Font name="AppleMyungjo Regular" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="songArtist" alignment="CENTER" text="Artist" textFill="WHITE" >
                <font>
                   <Font name="AppleMyungjo Regular" size="13.0" />
                </font>
