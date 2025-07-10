@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.List;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
 
@@ -127,13 +128,16 @@ public class HelloController implements Initializable {
         );
 
         Stage stage = (Stage) importButton.getScene().getWindow();
-        File file = fileChooser.showOpenDialog(stage);
+        List<File> files = fileChooser.showOpenMultipleDialog(stage);
 
-        if (file != null) {
-            songs.add(file);
-            String cleanName = file.getName().replaceFirst("[.][^.]+$", "");
-            songNames.add(cleanName);
-            System.out.println("Imported: " + file.getAbsolutePath());
+        if (files != null && !files.isEmpty()) {
+            for (File file : files) {
+                if (file != null && file.exists())
+                songs.add(file);
+                String cleanName = file.getName().replaceFirst("[.][^.]+$", "");
+                songNames.add(cleanName);
+                System.out.println("Imported: " + file.getAbsolutePath());
+            }
         }
     }
 
