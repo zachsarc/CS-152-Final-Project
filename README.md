@@ -1,4 +1,5 @@
-# Scene Builder Practice
+# Java-152 Final Project
+[Java II Repo](https://github.com/zachsarc/CS-152_Java2)
 
 A JavaFX Runners Log application that demonstrates the usage of Scene Builder. This project is built using Java and Maven.
 
