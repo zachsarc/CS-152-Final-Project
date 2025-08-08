@@ -1,10 +1,10 @@
 # Scene Builder Practice
 
-A JavaFX MP3 application that demonstrates the usage of Scene Builder. This project is built using Java and Maven.
+A JavaFX Runners Log application that demonstrates the usage of Scene Builder. This project is built using Java and Maven.
 
 ## Project Overview
 
-This application is a music player interface built with JavaFX and Scene Builder, allowing for a visual approach to UI development.
+This application is a user friendly running log that demonstrates core concepts in UI development, allowing for a visual approach to UI development.
 
 To run this project, you need:
 
@@ -15,4 +15,4 @@ To run this project, you need:
 ### Author: Zach Lariccia (zachsarc)
 
 ## Example of working program
-![ex](ExampleMP3.png)
+![ex](Example.png)
