@@ -1,41 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #785964;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.scenebuilderpractice.HelloController">
+<AnchorPane prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #002366;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.scenebuilderpractice.HelloController">
    <children>
-      <ListView fx:id="songList" maxWidth="300.0" prefWidth="250.0" style="-fx-background-color: #72555f;" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <StackPane AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <VBox alignment="CENTER" spacing="10.0">
-            <ImageView fx:id="albumPhoto" fitHeight="270.0" fitWidth="270.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="songName" alignment="CENTER" text="Song Name" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="AppleMyungjo Regular" size="13.0" />
-               </font>
-            </Label>
-            <Label fx:id="songArtist" alignment="CENTER" text="Artist" textFill="WHITE" >
-               <font>
-                  <Font name="AppleMyungjo Regular" size="13.0" />
-               </font>
-            </Label>
-         </VBox>
-      </StackPane>
-      <ProgressBar fx:id="songProgressBar" prefHeight="20.0" progress="0.0" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <ToggleButton fx:id="playButton" onAction="#playMedia" prefHeight="34.0" prefWidth="80.0" style="-fx-background-color: #A6979C;" text="Play" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="1.0" />
-      <ToggleButton fx:id="previousButton" onAction="#previousMedia" prefHeight="34.0" prefWidth="80.0" style="-fx-background-color: #A6979C;" text="Previous" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="82.0" />
-      <ToggleButton fx:id="nextButton" onAction="#nextMedia" prefHeight="34.0" prefWidth="82.0" style="-fx-background-color: #A6979C;" text="Next" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="163.0" />
-      <Slider fx:id="volumeSlider" blockIncrement="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="85.0" />
-      <ToggleButton fx:id="slowedButton" onAction="#slowMedia" prefHeight="34.0" prefWidth="81.0" style="-fx-background-color: #A6979C;" text="SLOWED" textFill="WHITE" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="1.0" />
-      <Button fx:id="importButton" onAction="#importMedia" style="-fx-background-color: #A6979C;" text="IMPORT" textFill="WHITE" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <GridPane layoutX="14.0" layoutY="14.0" prefHeight="142.0" prefWidth="312.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="runnersNameLabel" text="Runner's Name" textFill="WHITE" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <TextField fx:id="nameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="145.0" promptText="Enter Name Here" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label fx:id="runnersDistanceLabel" text="Runner's Distance (miles)" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <TextField fx:id="distanceField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="145.0" promptText="(ex. 3.6)" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Label fx:id="timeLabel" text="Time (minutes)" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <TextField fx:id="timeField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="145.0" promptText="hh:mm:ss" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+      <VBox alignment="CENTER" layoutX="3.0" layoutY="156.0" prefHeight="38.0" prefWidth="311.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="389.0">
+         <children>
+            <Button fx:id="addRunToList" mnemonicParsing="false" onAction="#onAdd" text="Add run to list">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <GridPane layoutX="94.0" layoutY="210.0" prefHeight="176.0" prefWidth="123.0" AnchorPane.leftAnchor="94.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onSort" text="Apply Sort" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Button>
+            <RadioButton fx:id="nameRadio" mnemonicParsing="false" text="NAME" textFill="WHITE" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <RadioButton fx:id="distanceRadio" mnemonicParsing="false" text="DISTANCE" textFill="WHITE" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <RadioButton fx:id="timeRadio" mnemonicParsing="false" text="TIME" textFill="WHITE" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+            <RadioButton fx:id="paceRadio" mnemonicParsing="false" text="PACE" textFill="WHITE" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <CheckBox fx:id="descendingBox" mnemonicParsing="false" text="DESCENDING" textFill="WHITE" GridPane.rowIndex="5" />
+         </children>
+      </GridPane>
+      <GridPane layoutX="341.0" layoutY="25.0" prefHeight="359.0" prefWidth="344.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="291.4535675048828" minHeight="10.0" prefHeight="262.35389709472656" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="154.98626708984375" minHeight="10.0" prefHeight="55.64610290527344" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="listToCsvButton" mnemonicParsing="false" onAction="#onSave" text="Save list to CSV" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <TableView fx:id="tableView" prefHeight="263.0" prefWidth="333.0">
+              <columns>
+                <TableColumn fx:id="nameCol" prefWidth="75.0" text="Name" /> <!-- Header labels to the table view -->
+                <TableColumn fx:id="distCol" prefWidth="100.0" text="Distance (mi)" /> <!-- Header labels to the table view -->
+                  <TableColumn fx:id="timeCol" prefWidth="75.0" text="Time" /> <!-- Header labels to the table view -->
+                  <TableColumn fx:id="paceCol" prefWidth="100.0" text="Pace (min/mi)" /> <!-- Header labels to the table view -->
+              </columns>
+            </TableView>
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
